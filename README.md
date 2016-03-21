@@ -15,6 +15,7 @@ If the original author updates his/her script and wants me to take my modificati
 * Relized there were problems with the script in Tampermonkey. I think this has been fixed.
 
 **Usage**:
+
 Install Tampermonkey or Greasemonkey. Go to the raw script in a browser https://github.com//csavio/pitchfork-ratings/raw/master/pitchfork-ratings.user.js and it should ask if you want to install the user script.
 
 Alternately you can go to https://greasyfork.org/en/scripts/13195-show-my-pitchfork-score-search-in-spotify and click install this script. 
