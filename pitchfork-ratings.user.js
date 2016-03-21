@@ -6,7 +6,7 @@
 // @include           http://pitchforkmedia.com/*
 // @include           http://www.pitchfork.com/*
 // @include           http://pitchfork.com/*
-// @require           http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js
+// @require           http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js
 // @description       This is now a fairly heavily modified version of http://userscripts.org/scripts/show/49052 updated so it gets albums and retries when an album rating is not available
 // ==/UserScript==
 
@@ -20,18 +20,18 @@ if (debugmode === true) {
     debugger;
 }
 
-function getLinks(mylinks, counter){
+function getLinks(mylinks, counter) {
     mylinks = mylinks || '';
     counter = counter || 0;
     GM_xmlhttpRequest({
         method: 'GET',
         url: location.protocol + '//' + location.host + mylinks,
-        onload: function(data){
+        onload: function (data) {
             try {
                 var rating = $(data.responseText).find("span.score").html();
-                rating = (rating.indexOf( "." ) > -1 ) ? rating : (rating + ".0");
-                if (isNaN(rating)){
-                    if (counter < 5){
+                rating = (rating.indexOf(".") > -1 ) ? rating : (rating + ".0");
+                if (isNaN(rating)) {
+                    if (counter < 5) {
                         setTimeout(getLinks(mylinks, counter++), 2000);
                         return;
                     }
@@ -39,18 +39,19 @@ function getLinks(mylinks, counter){
                         rating = '?';
                     }
                 }
-                if (rating > 5.0 && rating <= 6.9){
+                if (rating > 5.0 && rating <= 6.9) {
                     spanclass = "orange";
                 }
-                else if (rating  > 6.9 ){
+                else if (rating > 6.9) {
                     spanclass = "green";
                 }
                 else {
                     spanclass = "red";
                 }
-                $('a[href="'+mylinks+'"]').append('<span class="rating '+ spanclass +'">' + rating + '</span>');
+                $('a[href="' + mylinks + '"]').append('<span class="rating ' + spanclass + '">' + rating + '</span>');
             }
-            catch (e) {}
+            catch (e) {
+            }
         }
     });
 }
@@ -62,8 +63,8 @@ function checkLoc() {
     if ((firstrun || loc != initloc) && window.location.href.match(/\/reviews\/albums\//)) {
         GM_addStyle(styles);
         firstrun = false;
-        setTimeout(function(){
-            $(".review a[href*='reviews/albums']").each(function(){
+        setTimeout(function () {
+            $(".review a[href*='reviews/albums']").each(function () {
                 myhref = $(this).attr('href');
                 if (myhref.search(/reviews\/albums\/\d+/) === 1) {
                     getLinks(myhref);
