@@ -1,0 +1,9 @@
+# OSX
+.DS_Store
+
+# Node for JS libraries
+node_modules
+
+# Intellij stuff
+.idea
+*.iml
