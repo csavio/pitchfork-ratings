@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name              Show Pitchfork Ratings for Albums
-// @version           1.09
+// @version           1.10
 // @namespace         http://pitchfork.com/
 // @include           http://www.pitchforkmedia.com/*
 // @include           http://pitchforkmedia.com/*
@@ -11,7 +11,7 @@
 // ==/UserScript==
 
 var debugmode = false;
-var styles = 'span.rating {font-size: 12pt; background:white; position:absolute; display:block;width:30px; height:25px; padding:5px 0 10px 5px; top:0px;z-index:2; font-weight:bold;}.orange{color:orange} .green{color:green}.red{color:red}',
+var styles = '<style>span.rating {font-size: 12pt; background:white; position:absolute; display:block;width:30px; height:25px; padding:5px 0 10px 5px; top:0px; z-index:2; font-weight:bold;}.orange{color:orange} .green{color:green}.red{color:red}</style>',
     initloc = window.location.href,
     firstrun = true;
 var loccheck = setInterval(checkLoc, 300);
@@ -23,12 +23,12 @@ if (debugmode === true) {
 function getLinks(mylinks, counter) {
     mylinks = mylinks || '';
     counter = counter || 0;
-    GM_xmlhttpRequest({
-        method: 'GET',
+    $.ajax({
         url: location.protocol + '//' + location.host + mylinks,
-        onload: function (data) {
+        cache: true,
+        success: function (data) {
             try {
-                var rating = $(data.responseText).find("span.score").html();
+                var rating = $(data).find("span.score").html();
                 rating = (rating.indexOf(".") > -1 ) ? rating : (rating + ".0");
                 if (isNaN(rating)) {
                     if (counter < 5) {
@@ -61,7 +61,7 @@ function checkLoc() {
 
     // Only do something if the location has changed and it is an album review listing
     if ((firstrun || loc != initloc) && window.location.href.match(/\/reviews\/albums\//)) {
-        GM_addStyle(styles);
+        $('head').append(styles);
         firstrun = false;
         setTimeout(function () {
             $(".review a[href*='reviews/albums']").each(function () {
