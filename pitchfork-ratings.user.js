@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name              Show Pitchfork Ratings for Albums
-// @version           1.10
+// @version           1.10.1
 // @namespace         http://pitchfork.com/
 // @include           http://www.pitchforkmedia.com/*
 // @include           http://pitchforkmedia.com/*
@@ -11,7 +11,7 @@
 // ==/UserScript==
 
 var debugmode = false;
-var styles = '<style>span.rating {font-size: 12pt; background:white; position:absolute; display:block;width:30px; height:25px; padding:5px 0 10px 5px; top:0px; z-index:2; font-weight:bold;}.orange{color:orange} .green{color:green}.red{color:red}</style>',
+var styles = '<style>span.rating {font-size: 12pt; background:white; position:absolute; display:block;width:30px; height:25px; padding:5px 27px 20px 5px; top:5px; left:25px; z-index:2; font-weight:bold; border-radius: 5px;}.orange{color:orange} .green{color:green}.red{color:red}</style>',
     initloc = window.location.href,
     firstrun = true;
 var loccheck = setInterval(checkLoc, 300);
@@ -23,37 +23,42 @@ if (debugmode === true) {
 function getLinks(mylinks, counter) {
     mylinks = mylinks || '';
     counter = counter || 0;
-    $.ajax({
-        url: location.protocol + '//' + location.host + mylinks,
-        cache: true,
-        success: function (data) {
-            try {
-                var rating = $(data).find("span.score").html();
-                rating = (rating.indexOf(".") > -1 ) ? rating : (rating + ".0");
-                if (isNaN(rating)) {
-                    if (counter < 5) {
-                        setTimeout(getLinks(mylinks, counter++), 2000);
-                        return;
+    if ( $('a[href="' + mylinks + '"] span.rating').length === 0 ) {
+        $.ajax({
+            url: location.protocol + '//' + location.host + mylinks,
+            cache: true,
+            success: function (data) {
+                try {
+                    var rating = $(data).find("span.score").html();
+                    rating = (rating.indexOf(".") > -1 ) ? rating : (rating + ".0");
+                    if (isNaN(rating)) {
+                        if (counter < 5) {
+                            setTimeout(getLinks(mylinks, counter++), 2000);
+                            return;
+                        }
+                        else {
+                            rating = '?';
+                        }
+                    }
+                    if (rating > 5.0 && rating <= 6.9) {
+                        spanclass = "orange";
+                    }
+                    else if (rating > 6.9) {
+                        spanclass = "green";
                     }
                     else {
-                        rating = '?';
+                        spanclass = "red";
                     }
+
+                    $('a[href="' + mylinks + '"]').append('<span class="rating ' + spanclass + '">' + rating + '</span>');
+
                 }
-                if (rating > 5.0 && rating <= 6.9) {
-                    spanclass = "orange";
+                catch (e) {
                 }
-                else if (rating > 6.9) {
-                    spanclass = "green";
-                }
-                else {
-                    spanclass = "red";
-                }
-                $('a[href="' + mylinks + '"]').append('<span class="rating ' + spanclass + '">' + rating + '</span>');
             }
-            catch (e) {
-            }
-        }
-    });
+        });
+    }
+
 }
 
 function checkLoc() {
