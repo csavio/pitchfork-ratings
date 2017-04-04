@@ -11,7 +11,7 @@
 // ==/UserScript==
 
 var debugmode = false;
-var styles = '<style>span.rating {font-size: 12pt; background:white; position:absolute; display:block;width:30px; height:25px; padding:5px 27px 20px 5px; top:5px; left:25px; z-index:2; font-weight:bold; border-radius: 5px;}.orange{color:orange} .green{color:green}.red{color:red}</style>',
+var styles = '<style>span.rating {font-size: 12pt; background:white; position:absolute; display:block;width:30px; height:25px; padding:5px 27px 20px 5px; top:5px; left:25px; z-index:200; font-weight:bold; border-radius: 5px;}.orange{color:orange} .green{color:green}.red{color:red}</style>',
     initloc = window.location.href,
     firstrun = true;
 var loccheck = setInterval(checkLoc, 300);
