@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name              Show Pitchfork Ratings for Albums
-// @version           1.10.3
+// @version           1.10.4
 // @namespace         http://pitchfork.com/
 // @include           http://www.pitchforkmedia.com/*
 // @include           http://pitchforkmedia.com/*
@@ -10,7 +10,7 @@
 // @description       This is now a fairly heavily modified version of http://userscripts.org/scripts/show/49052 updated so it gets albums and retries when an album rating is not available
 // ==/UserScript==
 
-var debugmode = true;
+var debugmode = false;
 var styles = '<style>span.rating {font-size: 12pt; background:white; position:absolute; display:block;width:30px; height:25px; padding:5px 27px 20px 5px; top:5px; left:25px; z-index:2; font-weight:bold; border-radius: 5px;}.orange{color:orange} .green{color:green}.red{color:red}</style>',
     initloc = window.location.href,
     firstrun = true;
