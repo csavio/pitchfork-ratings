@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name              Show Pitchfork Ratings for Albums
-// @version           1.10.1
+// @version           1.10.2
 // @namespace         http://pitchfork.com/
 // @include           http://www.pitchforkmedia.com/*
 // @include           http://pitchforkmedia.com/*
@@ -71,7 +71,7 @@ function checkLoc() {
         setTimeout(function () {
             $(".review a[href*='reviews/albums']").each(function () {
                 myhref = $(this).attr('href');
-                if (myhref.search(/reviews\/albums\/\d+/) === 1) {
+                if (myhref.search(/reviews\/albums\/.*/) === 1) {
                     getLinks(myhref);
                 }
             });
