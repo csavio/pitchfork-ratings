@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name              Show Pitchfork Ratings for Albums
-// @version           1.10.4
-// @namespace         http://pitchfork.com/
-// @include           http://www.pitchforkmedia.com/*
-// @include           http://pitchforkmedia.com/*
-// @include           http://www.pitchfork.com/*
-// @include           http://pitchfork.com/*
+// @version           1.10.5
+// @namespace         https://pitchfork.com/reviews/albums/
+// @include           https://www.pitchforkmedia.com/*
+// @include           https://pitchforkmedia.com/*
+// @include           https://www.pitchfork.com/*
+// @include           https://pitchfork.com/*
 // @require           http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js
 // @description       This is now a fairly heavily modified version of http://userscripts.org/scripts/show/49052 updated so it gets albums and retries when an album rating is not available
 // ==/UserScript==
