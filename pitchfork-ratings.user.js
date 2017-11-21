@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name              Show Pitchfork Ratings for Albums
-// @version           1.10.5
+// @version           1.10.6
 // @namespace         https://github.com/csavio/pitchfork-ratings/
 // @include           https://www.pitchforkmedia.com/*
 // @include           https://pitchforkmedia.com/*
