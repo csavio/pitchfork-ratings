@@ -34,80 +34,78 @@ let initloc = window.location.href;
 const ratingChecked = [];
 
 if (debugmode === true) {
-    debugger;
+  debugger;
 }
 
 async function getLinks(mylinks, counter) {
-    mylinks = mylinks || '';
-    counter = counter || 0;
-    const tempLink = mylinks.replace(/https:\/\/pitchfork\.com/, '');
-    if (document.querySelectorAll(`a[href="${tempLink}] span.rating`).length === 0) {
-        // Pure JavaScript using fetch
-        try {
-            const response = await fetch(mylinks);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const html = await response.text();
+  mylinks = mylinks || '';
+  counter = counter || 0;
+  const tempLink = mylinks.replace(/https:\/\/pitchfork\.com/, '');
+  if (document.querySelectorAll(`a[href="${tempLink}] span.rating`).length === 0) {
+    // Pure JavaScript using fetch
+    try {
+      const response = await fetch(mylinks);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const html = await response.text();
 
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const element = doc.querySelector('p[class*="Rating-"]');
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const element = doc.querySelector('p[class*="Rating-"]');
 
-            if (element) {
-                let rating = element.textContent;
-                rating = parseFloat(rating);
-                let spanclass = '';
-                if (rating > 5.0 && rating <= 6.9) {
-                    spanclass = 'orange';
-                }
-                else if (rating > 6.9) {
-                    spanclass = 'green';
-                }
-                else {
-                    spanclass = 'red';
-                }
+      if (element) {
+        let rating = element.textContent;
+        rating = parseFloat(rating);
+        let spanclass = '';
+        if (rating > 5.0 && rating <= 6.9) {
+          spanclass = 'orange';
+        } else if (rating > 6.9) {
+          spanclass = 'green';
+        } else {
+          spanclass = 'red';
+        }
 
-                const album = encodeURIComponent(doc.querySelector(`h1[data-testid="ContentHeaderHed"]`).textContent);
-                const artist = encodeURIComponent(doc.querySelector(`a[href^="/artists"]`).textContent);
-                const parentContainer = document.querySelector(`a[href="${tempLink}"]`).parentElement.parentElement;
-                parentContainer.style.position = 'relative';
-                parentContainer.insertAdjacentHTML(
-                    'beforeend',
-                    `<span class="rating ${spanclass}">${(Number.isInteger(rating)) ? rating + '.0' : rating}</span>
+        const album = encodeURIComponent(doc.querySelector(`h1[data-testid="ContentHeaderHed"]`).textContent);
+        const artist = encodeURIComponent(doc.querySelector(`a[href^="/artists"]`).textContent);
+        const parentContainer = document.querySelector(`a[href="${tempLink}"]`).parentElement.parentElement;
+        parentContainer.style.position = 'relative';
+        parentContainer.insertAdjacentHTML(
+          'beforeend',
+          `<span class="rating ${spanclass}">${(Number.isInteger(rating)) ? rating + '.0' : rating}</span>
                      <span class="spotifyButton">
                         <a href="https://open.spotify.com/search/artist:${artist}%20album:${album}" target="_blank" onclick="event.stopPropagation(); window.open(this.href, '_blank'); return false;">${spotifySvg}</a>
                      </span>`
         );
       } else {
-          return null;
+        return null;
       }
     } catch (error) {
-        console.error("Error fetching or parsing HTML:", error);
-        return null;
+      console.error("Error fetching or parsing HTML:", error);
+      return null;
     }
   }
 
 }
 
 function checkLoc() {
-    var loc = window.location.href;
+  var loc = window.location.href;
 
-    // Only do something if the location has changed and it is an album review listing
-    if ((firstrun || loc != initloc) && window.location.href.match(/(\/reviews\/)|(\/best\/)/)) {
-        document.querySelector('head').insertAdjacentHTML('beforeend', styles);
-        firstrun = false;
-        setTimeout(function () {
-            document.querySelectorAll("a[href^='/reviews/albums/']").forEach(async (node) => {
-                const myhref = node.href;
-                // There are two links so make sure the rating is added only once
-                if (node.href.match(/reviews\/albums\/[\w\d.]+/) && !ratingChecked.includes(myhref)) {
-                    ratingChecked.push(myhref);
-                    await getLinks(myhref);
-                }
-            });
-        }, 2000);
-    }
+  // Only do something if the location has changed and it is an album review listing
+  if ((firstrun || loc != initloc) && window.location.href.match(/(\/reviews\/)|(\/best\/)/)) {
+    document.querySelector('head').insertAdjacentHTML('beforeend', styles);
+    firstrun = false;
+    setTimeout(function () {
+      document.querySelectorAll("a[href^='/reviews/albums/']").forEach(async (node) => {
+        const myhref = node.href;
+        // There are two links so make sure the rating is added only once
+        if (node.href.match(/reviews\/albums\/[\w\d.]+/) && !ratingChecked.includes(myhref)) {
+          ratingChecked.push(myhref);
+          await getLinks(myhref);
+        }
+      });
+    }, 2000);
+  }
 
-    initloc = window.location.href;
+  initloc = window.location.href;
 }
